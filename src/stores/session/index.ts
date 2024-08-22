@@ -1,6 +1,7 @@
 import { create } from "zustand";
 
 export type Session = {
+    id: string;
     host: string;
     port: number;
     username: string;
@@ -12,20 +13,12 @@ export type Session = {
 type SessionStore = {
     sessions: Session[],
     addSession: (newSession: Session) => void;
-    deleteSession: (sessionId: number) => void;
-    editSession: (sessionId: number, newSession: Session) => void;
+    deleteSession: (sessionId: string) => void;
+    editSession: (sessionId: string, newSession: Session) => void;
 }
 
 const sessionStore = create<SessionStore>()((set) => ({
-    sessions: [
-        {
-            host: "192.168.0.70",
-            port: 22,
-            username: "root",
-            password: "pazehlindo",
-            title: "Proxmox Syrtex"
-        }
-    ],
+    sessions: [],
     addSession(newSession) {
         set((state) => {
             state.sessions.push(newSession);
@@ -35,15 +28,15 @@ const sessionStore = create<SessionStore>()((set) => ({
     },
     deleteSession(sessionId) {
         set((state) => {
-            const newSessions = state.sessions.filter((_, index) => index !== sessionId)
+            const newSessions = state.sessions.filter((session) => session.id !== sessionId)
 
             return { sessions: newSessions }
         })
     },
     editSession(sessionId, newSession) {
         set((state) => {
-            const newSessions = state.sessions.map((session, index) => {
-                if (index === sessionId) return newSession;
+            const newSessions = state.sessions.map((session) => {
+                if (session.id === sessionId) return newSession;
                 return session;
             });
 

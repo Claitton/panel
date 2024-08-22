@@ -26,7 +26,7 @@ const router = createBrowserRouter([
     element: <TerminalPage />
   },
   {
-    path: "/xterm",
+    path: "/xterm/:sessionId",
     element: <XTermPage />
   }
 ]);

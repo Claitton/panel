@@ -5,6 +5,7 @@ import { EditSessionDialog } from "./components/modals/edit-session";
 import { ConnectSessionButton } from "./components/buttons/connect-session";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
+import { Session } from "@/stores/session";
 
 
 export default function SessionsPage() {
@@ -29,14 +30,18 @@ export default function SessionsPage() {
     // }
 
     useEffect(() => {
-        console.log(listSessionsData)
-
-        if (listSessionsData && !listSessionsIsFetched) {
+        if (listSessionsData) {
             for (const session of listSessionsData) {
-                addSession(session);
+                const _session: Session = {
+                    ...session,
+                    title: "abc"
+                }
+                addSession(_session);
             }
         }
-    }, [listSessionsData])
+    }, [listSessionsData]);
+
+    useEffect(() => console.log(sessions), [sessions]);
 
     return <div className="container">
         <div className="px-4 sm:px-0 flex justify-between">
@@ -63,7 +68,7 @@ export default function SessionsPage() {
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-1 sm:mt-0">{session.host}</dd>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-1 sm:mt-0">{session.username}</dd>
                         <div className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-1 sm:mt-0 flex justify-end gap-2 pr-4">
-                            <ConnectSessionButton sessionId={i} />
+                            <ConnectSessionButton sessionId={session.id} />
                             <EditSessionDialog sessionId={i} />
                             <DeleteSessionDialog sessionId={i} />
                         </div>
